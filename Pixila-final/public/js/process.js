@@ -24,10 +24,12 @@ function autoIncrese(obj, des) {
   var autoNumber = setInterval(function () {
     let number = parseInt(obj.text())
     number += 1;
-    obj.text(number);
-    if (number === des) {
-      clearInterval(autoNumber);
+
+    if (number == des + 1) {
+      return;
     }
+    obj.text(number);
+
   }, 1000 / (des / 5));
 }
 
@@ -38,6 +40,30 @@ function autoIncrese(obj, des) {
 
 
 function runAutomatic() {
+
+  $("#counter-user").waypoint(function (direction) {
+    $(".counter").text(0);
+    autoIncrese($("#counter-user"), PROJECT_EXECUTED);
+    autoIncrese($("#counter-global"), GLOBAL_PRESENCE);
+    autoIncrese($("#counter-users"), ACTIVE_CLIENTS);
+    autoIncrese($("#counter-reg"), RECOGNITION);
+
+  }, { offset: 'bottom-in-view' });
+
+  $("#counter-progressbar").waypoint(function (direction) {
+    $("#counter-progressbar").text(0);
+    autoIncrese($("#counter-progressbar"), PROGRESSING);
+    $("#progressbar-status").animate({
+      width: `${PROGRESSING}%`
+    }, 4000, 'linear');
+
+  }, { offset: 'bottom-in-view' });
+}
+
+function autoProgressBar() {
+  $("#progressbar-status").waypoint(function (direction) {
+
+  }, { offset: 'bottom-in-view' });
 }
 
 function draggableSlider() {
@@ -81,13 +107,36 @@ function draggableFeedback() {
   });
 }
 
+function draggableLogoPartner() {
+  $('.owl-carousel.logo-partner').owlCarousel({
+    loop: true,
+    margin: 10,
+    dots: false,
+    autoplay: true,
+    responsive: {
+      0: {
+        items: 2
+      },
+      576: {
+        items: 3
+      },
+      768: {
+        items: 4
+      },
+      992: {
+        items: 5
+      }
+    }
+  });
+}
+
 function navbarFixed() {
 
-  if (window.scrollY > 200) {
-    $('#navbar_top').addClass('fixed-top');
+  if (window.scrollY > 110) {
+    $('#navbar_top').addClass('sticky-on');
     navbar_height = $('.navbar').offsetHeight;
   } else {
-    $('#navbar_top').removeClass('fixed-top');
+    $('#navbar_top').removeClass('sticky-on');
     // remove padding top from body
   }
 }
@@ -126,8 +175,10 @@ function openSubmenu() {
 $(document).ready(function () {
   autoPlayYouTubeModal();
   runAutomatic();
+  autoProgressBar();
   draggableSlider();
   draggableFeedback();
+  draggableLogoPartner();
   $(window).scroll(function () {
     navbarFixed();
   });
